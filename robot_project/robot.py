@@ -47,6 +47,17 @@ class BBCON:
             sensob.reset() # may need to reset associated sensors...
 
 
+class Sensob:
+
+    def __init__(self):
+        self.sensor = associated_sensor
+        self.value = value
+
+    def update(self):
+        pass
+
+
+
 
 
 
