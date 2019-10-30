@@ -1,26 +1,22 @@
 class BBCON:
 
-
-    def __init__(self): #arbit
+    def __init__(self):  # arbit
         self.behaviors = []
         self.active_behaviors = []
         self.sensobs = []
         self.motobs = []
-        self.arbitrator = None #arbit
+        self.arbitrator = None  # arbit
         self.current_timestep = None
         self.inactive_behavior = []
         self.currently_controlled = None
-
 
     def add_behavior(self, behavior):
         """ adds a new behavior """
         # mulig vi må lage en ny behavior-instans her...
         self.behaviors.append(behavior)
 
-
     def add_sensob(self, sensob):
         self.sensobs.append(sensob)
-
 
     def activate_behavior(self, behavior):
         """ if behavior is an existing behavior, add to
@@ -32,7 +28,7 @@ class BBCON:
     def deactivate_behavior(self, behavior):
         """ if behavior is an existing behavior, remove
             from active_behaviors """
-        if behavior not in self.behaviors:
+        if behavior not in self.active_behaviors:
             return
         self.active_behaviors.remove(behavior)
 
@@ -42,22 +38,29 @@ class BBCON:
         # self.arbit..choose_act... chooses a winning behavior and returns
         # the winning behavors motor recommendations and halt_request
         motor_recs, halt_request = self.arbitrator.choose_action()
-        self.motobs.update(motor_recs) # update motobs which then updates all motors
+        self.motobs.update(motor_recs)  # update motobs which then updates all motors
         for sensob in self.sensobs:
-            sensob.reset() # may need to reset associated sensors...
+            sensob.reset()  # may need to reset associated sensors...
 
 
 class Sensob:
 
     def __init__(self):
-        self.sensor = associated_sensor
-        self.value = value
+        self.sensors = []
+        self.values = []
+
+    def update(self):
+        for i, sensor in enumerate(self.sensors):
+            self.values[i] = sensor.get.value()
+
+
+class SensorWrapper:
+    def __init__(self):
+        pass
 
     def update(self):
         pass
 
-
-
-
-
+    def get_value(self):
+        pass
 
