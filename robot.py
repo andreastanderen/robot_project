@@ -97,19 +97,42 @@ class Behavior:
         self.weight = 0
 
     def consider_deactivation(self):
-        if not self.active_flag:
-            return
+        raise NotImplementedError
 
     def consider_activation(self):
-        if self.active_flag:
-            return
+        raise NotImplementedError
 
     def update(self):
-
+        if self.active_flag:
+            self.consider_deactivation()
+        else:
+            self.consider_activation()
         self.sense_and_act()
 
     def sense_and_act(self):
         pass
+
+
+class FollowLineBehavior(Behavior):
+
+    def __init__(self, controller: BBCON, priority):
+        super().__init__(controller, priority)
+        self.activate_value = 0.5
+
+    def consider_activation(self):
+        if any(value > self.activate_value for value in self.sensobs[0].values):
+            self.controller.activate_behavior(self)
+
+    def consider_deactivation(self):
+        if all(value > 1 - self.activate_value for value in self.sensobs[0].values):
+            self.controller.deactivate_behavior(self)
+
+    def sense_and_act(self):
+        self.sensobs[0].update()
+        values = self.sensobs[0].get_values()
+        left_motor_action = 1 - min(values[0:3])
+        right_motor_action = 1 - min(values[3:])
+        self.motor_recommendations = [left_motor_action, right_motor_action]
 
 
 class Arbitrator:
@@ -123,7 +146,6 @@ class Arbitrator:
 
 
 if __name__ == '__main__':
-    controller = BBCON()
-    arbitrator = Arbitrator(controller)
-    controller.arbitrator = arbitrator
-
+    CONTROLLER = BBCON()
+    ARBITRATOR = Arbitrator(CONTROLLER)
+    CONTROLLER.arbitrator = ARBITRATOR
