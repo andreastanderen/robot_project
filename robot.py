@@ -1,3 +1,4 @@
+import random
 import sys
 import time
 
@@ -63,7 +64,9 @@ class BBCON:
 
 class Sensob:
 
-    def __init__(self, sensors=[]):
+    def __init__(self, sensors=None):
+        if sensors is None:
+            sensors = []
         self.sensors = sensors
         self.values = []
 
@@ -108,31 +111,77 @@ class Behavior:
         else:
             self.consider_activation()
         self.sense_and_act()
+        self.weight = self.match_degree * self.priority
 
     def sense_and_act(self):
-        pass
+        raise NotImplementedError
 
 
 class FollowLineBehavior(Behavior):
 
-    def __init__(self, controller: BBCON, priority):
+    def __init__(self, controller: BBCON, priority, ir_sensor):
         super().__init__(controller, priority)
         self.activate_value = 0.5
+        self.sensobs = ir_sensor
 
     def consider_activation(self):
-        if any(value > self.activate_value for value in self.sensobs[0].values):
+        if any(value > self.activate_value for value in self.sensobs.values):
             self.controller.activate_behavior(self)
 
     def consider_deactivation(self):
-        if all(value > 1 - self.activate_value for value in self.sensobs[0].values):
+        if all(value > 1 - self.activate_value for value in self.sensobs.values):
             self.controller.deactivate_behavior(self)
 
     def sense_and_act(self):
-        self.sensobs[0].update()
-        values = self.sensobs[0].get_values()
+        self.sensobs.update()
+        values = self.sensobs.get_value()
         left_motor_action = 1 - min(values[0:3])
         right_motor_action = 1 - min(values[3:])
         self.motor_recommendations = [left_motor_action, right_motor_action]
+        self.match_degree = max(left_motor_action, right_motor_action)
+
+
+class SearchBehavior(Behavior):
+    def __init__(self, controller: BBCON, priority, ir_sensob, ultrasonic):
+        super().__init__(controller, priority)
+        self.sensobs = [ir_sensob, ultrasonic]
+        self.deactivate_ir_value = 0.5
+        self.deactivate_ultra = 15
+
+    def consider_activation(self):
+        ir_deactivated = all(value > self.deactivate_ir_value for value in self.sensobs[0].get_value())
+        ultra_deactivated = self.sensobs[1].get_value() > self.deactivate_ultra
+        if ir_deactivated and ultra_deactivated:
+            self.controller.activate_behavior(self)
+
+    def consider_deactivation(self):
+        ir_deactivated = all(value > self.deactivate_ir_value for value in self.sensobs[0].get_value())
+        ultra_deactivated = self.sensobs[1].get_value() > self.deactivate_ultra
+        if not (ir_deactivated and ultra_deactivated):
+            self.controller.deactivate_behavior(self)
+
+    def sense_and_act(self):
+        [sensob.update() for sensob in self.sensobs]
+        ir_values =  self.sensobs[0].get_value()
+        ultra_value = self.sensobs[1].get_value()
+
+        ir_deactivated = min(ir_values) > self.deactivate_ir_value
+        ultra_deactivated = ultra_value > self.deactivate_ultra
+        ir_match = 1 - min(ir_values)
+        ultra_match = 1 - min(ultra_value, self.deactivate_ultra) / (self.deactivate_ultra + 1)
+        if not ir_deactivated:
+            self.motor_recommendations = [0, 0]
+            self.match_degree = ir_match
+        elif not ultra_deactivated:
+            forward_speed = 0.3
+            self.motor_recommendations = [forward_speed] * 2
+            self.match_degree = ultra_match
+        else:
+            left_motor = random.random() * 2 - 1
+            right_motor = random.random() * 2 - 1
+            self.motor_recommendations = [left_motor, right_motor]
+            self.match_degree = 1 - ir_match * ultra_match
+
 
 
 class Arbitrator:
