@@ -74,6 +74,7 @@ class Sensob:
         if len(self.values) == 0:
             self.values = [None] * len(self.sensors)
         for i, sensor in enumerate(self.sensors):
+            sensor.update()
             self.values[i] = sensor.get_value()
 
 
