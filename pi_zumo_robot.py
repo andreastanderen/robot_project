@@ -13,9 +13,10 @@ class PiZumoRobot:
 
         self.controller.motobs = [robot.Motob()]
 
-        self.reflect_sensob = robot.Sensob([ReflectanceSensors()])
-        self.ultra_sensob = robot.Sensob([Ultrasonic()])
-        self.cam_sensob = robot.Sensob([Camera()])
+        reflect_sensob = robot.Sensob([ReflectanceSensors()])
+        ultra_sensob = robot.Sensob([Ultrasonic()])
+        cam_sensob = robot.Sensob([Camera()])
+        self.controller.sensobs = [reflect_sensob, ultra_sensob, cam_sensob]
 
 
 
