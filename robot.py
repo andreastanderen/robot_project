@@ -179,7 +179,7 @@ class SearchBehavior(Behavior):
             self.controller.deactivate_behavior(self)
 
     def sense_and_act(self):
-        ir_values = self.sensobs[0].values
+        ir_values = self.sensobs[0].values[0]
         ultra_value = self.sensobs[1].values[0]
 
         ir_deactivated = min(ir_values) > self.deactivate_ir_value
