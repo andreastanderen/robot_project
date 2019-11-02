@@ -138,15 +138,15 @@ class FollowLineBehavior(Behavior):
 
     def consider_activation(self):
         print("consider values", self.sensobs[0].values)
-        if any(value > self.activate_value for value in self.sensobs[0].values):
+        if any(value > self.activate_value for value in self.sensobs[0].values[0]):
             self.controller.activate_behavior(self)
 
     def consider_deactivation(self):
-        if all(value > 1 - self.activate_value for value in self.sensobs[0].values):
+        if all(value > 1 - self.activate_value for value in self.sensobs[0].values[0]):
             self.controller.deactivate_behavior(self)
 
     def sense_and_act(self):
-        values = self.sensobs[0].values
+        values = self.sensobs[0].values[0]
         min_left_value = min(values[0:3])
         min_right_value = min(values[0:3])
         left_motor_action = min_left_value
