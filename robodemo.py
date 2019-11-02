@@ -60,7 +60,7 @@ def random_step(motors,speed=0.25,duration=1):
 # panoramo view, many of which may be created per "vacation".
 
 def tourist(steps=25,shots=5,speed=.25):
-    ZumoButton().wait_for_press()
+    # ZumoButton().wait_for_press()
     rs = ReflectanceSensors(); m = Motors(); c = Camera()
     for i in range(steps):
         random_step(m,speed=speed,duration=0.5)
@@ -81,3 +81,4 @@ def shoot_panorama(camera,motors,shots=5):
 
 if __name__ == '__main__':
     dancer()
+    tourist()
