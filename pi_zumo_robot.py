@@ -9,11 +9,11 @@ class PiZumoRobot:
 
     def __init__(self):
         self.controller = robot.BBCON()
-        self.controller.arbitrator = robot.Arbitrator(self)
+        self.controller.arbitrator = robot.Arbitrator(self.controller)
 
         self.controller.motobs = [robot.Motob()]
 
-        self.reflect_sensob = robot.Sensob([ReflectanceSensors(auto_calibrate=True)])
+        self.reflect_sensob = robot.Sensob([ReflectanceSensors()])
         self.ultra_sensob = robot.Sensob([Ultrasonic()])
         self.cam_sensob = robot.Sensob([Camera()])
 
