@@ -13,7 +13,7 @@ class Motors():
         self.high = 500
         self.normal = 300
         self.low = 100
-        wp.wiringPiSetup()
+        wp.wiringPiSetupSys()
         print(wp.pinMode(18, 2))
         wp.pinMode(19, 2)
         wp.pinMode(23, 1)
