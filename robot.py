@@ -68,9 +68,11 @@ class Sensob:
         if sensors is None:
             sensors = []
         self.sensors = sensors
-        self.values = [None] * len(sensors)
+        self.values = []
 
     def update(self):
+        if len(self.values) == 0:
+            self.values = [None] * len(self.sensors)
         for i, sensor in enumerate(self.sensors):
             self.values[i] = sensor.get_value()
 
@@ -162,7 +164,7 @@ class SearchBehavior(Behavior):
 
     def sense_and_act(self):
         [sensob.update() for sensob in self.sensobs]
-        ir_values =  self.sensobs[0].get_value()
+        ir_values = self.sensobs[0].get_value()
         ultra_value = self.sensobs[1].get_value()
 
         ir_deactivated = min(ir_values) > self.deactivate_ir_value
@@ -181,6 +183,7 @@ class SearchBehavior(Behavior):
             right_motor = random.random() * 2 - 1
             self.motor_recommendations = [left_motor, right_motor]
             self.match_degree = 1 - ir_match * ultra_match
+
 
 class TakePictureBehavior(Behavior):
     def __init__(self, controller: BBCON, priority, camera, ultrasonic):
