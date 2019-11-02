@@ -28,6 +28,7 @@ class BBCON:
     def activate_behavior(self, behavior):
         """ if behavior is an existing behavior, add to
             active_behaviors """
+        print("activated", )
         if behavior not in self.behaviors:
             return
         self.active_behaviors.append(behavior)
@@ -119,6 +120,9 @@ class Behavior:
 
     def sense_and_act(self):
         raise NotImplementedError
+
+    def __str__(self):
+        return type(self)
 
 
 class FollowLineBehavior(Behavior):
