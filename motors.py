@@ -13,8 +13,8 @@ class Motors():
         self.high = 500
         self.normal = 300
         self.low = 100
-        wp.wiringPiSetupSys()
-        print(wp.pinMode(18, 2))
+
+        wp.pinMode(18, 2)
         wp.pinMode(19, 2)
         wp.pinMode(23, 1)
         wp.pinMode(24, 1)
@@ -40,7 +40,6 @@ class Motors():
 
     def backward(self, speed=0.25, dur=None):
         self.dc = int(self.max * speed)
-        print("dc", self.dc)
         self.set_left_dir(1)
         self.set_right_dir(1)
         self.set_left_speed(self.dc)
@@ -94,13 +93,13 @@ class Motors():
     # These are lower-level routines that translate speeds and directions into write commands to the motor output pins.
 
     def set_left_speed(self, dc):
-        print(wp.pwmWrite(18, dc))
+        wp.pwmWrite(18, dc)
 
     def set_right_speed(self, dc):
         wp.pwmWrite(19, dc)
 
     def set_left_dir(self, is_forward):
-        print(wp.digitalWrite(23, is_forward))  # 0 is forward so if they pass 1 we 'not' it
+        wp.digitalWrite(23, is_forward)  # 0 is forward so if they pass 1 we 'not' it
 
     def set_right_dir(self, is_forward):
         wp.digitalWrite(24, is_forward)  # 0 is forward so if they pass 1 we 'not' it
