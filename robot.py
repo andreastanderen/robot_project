@@ -1,7 +1,7 @@
 import random
 import sys
 import time
-
+import imager2 as IMR
 import motors
 
 
@@ -109,6 +109,7 @@ class Behavior:
         raise NotImplementedError
 
     def update(self):
+        [sensob.update() for sensob in self.sensobs]
         if self.active_flag:
             self.consider_deactivation()
         else:
@@ -125,23 +126,28 @@ class FollowLineBehavior(Behavior):
     def __init__(self, controller: BBCON, priority, ir_sensor):
         super().__init__(controller, priority)
         self.activate_value = 0.5
-        self.sensobs = ir_sensor
+        self.sensobs = [ir_sensor]
 
     def consider_activation(self):
-        if any(value > self.activate_value for value in self.sensobs.values):
+        if any(value > self.activate_value for value in self.sensobs[0].values):
             self.controller.activate_behavior(self)
 
     def consider_deactivation(self):
-        if all(value > 1 - self.activate_value for value in self.sensobs.values):
+        if all(value > 1 - self.activate_value for value in self.sensobs[0].values):
             self.controller.deactivate_behavior(self)
 
     def sense_and_act(self):
-        self.sensobs.update()
-        values = self.sensobs.get_value()
-        left_motor_action = 1 - min(values[0:3])
-        right_motor_action = 1 - min(values[3:])
-        self.motor_recommendations = [left_motor_action, right_motor_action]
-        self.match_degree = max(left_motor_action, right_motor_action)
+        values = self.sensobs[0].values
+        min_left_value = min(values[0:3])
+        min_right_value = min(values[0:3])
+        left_motor_action = min_left_value
+        right_motor_action = min_right_value
+        if left_motor_action != right_motor_action:
+            self.motor_recommendations = [left_motor_action, right_motor_action]
+        else:
+            max_action = max(left_motor_action, right_motor_action)
+            self.motor_recommendations = [max_action, max_action]
+        self.match_degree = max(1 - left_motor_action, 1 - right_motor_action)
 
 
 class SearchBehavior(Behavior):
@@ -152,21 +158,20 @@ class SearchBehavior(Behavior):
         self.deactivate_ultra = 15
 
     def consider_activation(self):
-        ir_deactivated = all(value > self.deactivate_ir_value for value in self.sensobs[0].get_value())
-        ultra_deactivated = self.sensobs[1].get_value() > self.deactivate_ultra
+        ir_deactivated = all(value > self.deactivate_ir_value for value in self.sensobs[0].values)
+        ultra_deactivated = self.sensobs[1].values[0] > self.deactivate_ultra
         if ir_deactivated and ultra_deactivated:
             self.controller.activate_behavior(self)
 
     def consider_deactivation(self):
         ir_deactivated = all(value > self.deactivate_ir_value for value in self.sensobs[0].get_value())
-        ultra_deactivated = self.sensobs[1].get_value() > self.deactivate_ultra
+        ultra_deactivated = self.sensobs[1].values[0] > self.deactivate_ultra
         if not (ir_deactivated and ultra_deactivated):
             self.controller.deactivate_behavior(self)
 
     def sense_and_act(self):
-        [sensob.update() for sensob in self.sensobs]
-        ir_values = self.sensobs[0].get_value()
-        ultra_value = self.sensobs[1].get_value()
+        ir_values = self.sensobs[0].values
+        ultra_value = self.sensobs[1].values[0]
 
         ir_deactivated = min(ir_values) > self.deactivate_ir_value
         ultra_deactivated = ultra_value > self.deactivate_ultra
@@ -193,12 +198,25 @@ class TakePictureBehavior(Behavior):
         self.activate_value = 15
 
     def consider_activation(self):
-        value = self.sensobs[1].get_value()
-        if value <= 15:
+        value = self.sensobs[1].values[0]
+        if value <= self.activate_value:
             self.controller.activate_behavior(self)
 
     def consider_deactivation(self):
-        value = self.sensobs[1].get_value()
+        value = self.sensobs[1].values[0]
+        if value > self.activate_value:
+            self.controller.deactivate_behavior(self)
+
+    def sense_and_act(self):
+        value = self.sensobs[1].values[0]
+        if value > 5:
+            self.motor_recommendations = [0.5, 0.5]
+            self.match_degree = 1
+        elif value <= 5:
+            self.motor_recommendations = [0, 0]
+            self.match_degree = 1
+            img = IMR.Imager(image=self.sensobs[0].values)
+            img.dump_image(str(time.asctime()) + '.jpeg')
 
 
 class Arbitrator:
@@ -208,6 +226,7 @@ class Arbitrator:
 
     def choose_action(self):
         action = max(self.controller.active_behaviors, key=lambda b: b.weight)
+        print("Chose", type(action))
         return action.motor_recommendations, action.halt_request
 
 

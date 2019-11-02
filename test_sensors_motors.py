@@ -18,4 +18,4 @@ sensob.update()
 for i, value in enumerate(sensob.values):
     print(type(sensob.sensors[i]), value)
 
-m.forward(speed=1, dur=50)
+m.forward(speed=1, dur=5)
