@@ -115,6 +115,7 @@ class Behavior:
         if self.active_flag:
             self.consider_deactivation()
         else:
+            print("consider activation for", self)
             self.consider_activation()
         self.sense_and_act()
         self.weight = self.match_degree * self.priority
