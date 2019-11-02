@@ -134,7 +134,7 @@ class FollowLineBehavior(Behavior):
         self.sensobs = [ir_sensor]
 
     def consider_activation(self):
-        print(self.sensobs[0].values)
+        print("consider values", self.sensobs[0].values)
         if any(value > self.activate_value for value in self.sensobs[0].values):
             self.controller.activate_behavior(self)
 
