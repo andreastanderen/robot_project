@@ -49,6 +49,7 @@ class BBCON:
         # the winning behavors motor recommendations and halt_request
         [sensob.update() for sensob in self.sensobs]
         [behavior.update() for behavior in self.behaviors]
+        print(self.behaviors)
         motor_recs, halt_request = self.arbitrator.choose_action()
         if halt_request:
             sys.exit()

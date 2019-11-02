@@ -18,6 +18,11 @@ class PiZumoRobot:
         cam_sensob = robot.Sensob([Camera()])
         self.controller.sensobs = [reflect_sensob, ultra_sensob, cam_sensob]
 
+        line = robot.FollowLineBehavior(self.controller, 1, reflect_sensob)
+        search = robot.SearchBehavior(self.controller, 1, reflect_sensob, ultra_sensob)
+        picture = robot.TakePictureBehavior(self.controller, 2, cam_sensob, ultra_sensob)
+        self.controller.behaviors = [line, search, picture]
+
 
 
     def run(self):
