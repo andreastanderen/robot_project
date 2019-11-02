@@ -81,7 +81,7 @@ class Sensob:
         for i, sensor in enumerate(self.sensors):
             sensor.update()
             self.values[i] = sensor.get_value()
-            print(type(sensor), self.values[i])
+            # print(type(sensor), self.values[i])
 
     def reset(self):
         for sensor in self.sensors:
