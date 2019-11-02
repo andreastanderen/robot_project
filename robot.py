@@ -98,7 +98,9 @@ class Motob:
         self.value = recommendation
 
     def operationalize(self):
-        pass
+        if self.value is None:
+            return
+        self.motors[0].set_value(self.value)
 
 
 class Behavior:
@@ -138,7 +140,7 @@ class FollowLineBehavior(Behavior):
 
     def __init__(self, controller: BBCON, priority, ir_sensor):
         super().__init__(controller, priority)
-        self.activate_value = 0.3
+        self.activate_value = 0.1
         self.sensobs = [ir_sensor]
 
     def consider_activation(self):
@@ -167,7 +169,7 @@ class SearchBehavior(Behavior):
     def __init__(self, controller: BBCON, priority, ir_sensob, ultrasonic):
         super().__init__(controller, priority)
         self.sensobs = [ir_sensob, ultrasonic]
-        self.deactivate_ir_value = 0.5
+        self.deactivate_ir_value = 0.1
         self.deactivate_ultra = 15
 
     def consider_activation(self):
@@ -177,7 +179,7 @@ class SearchBehavior(Behavior):
             self.controller.activate_behavior(self)
 
     def consider_deactivation(self):
-        ir_deactivated = all(value > self.deactivate_ir_value for value in self.sensobs[0].values[0])
+        ir_deactivated = any(value < self.deactivate_ir_value for value in self.sensobs[0].values[0])
         ultra_deactivated = self.sensobs[1].values[0] > self.deactivate_ultra
         if not (ir_deactivated and ultra_deactivated):
             self.controller.deactivate_behavior(self)
