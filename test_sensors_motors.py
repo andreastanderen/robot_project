@@ -16,4 +16,4 @@ sensob.sensors = [cam, ir_proxim, reflect, ultra]
 
 sensob.update()
 for i, value in enumerate(sensob.values):
-    print(type(sensob.sensors), value)
+    print(type(sensob.sensors[i]), value)
