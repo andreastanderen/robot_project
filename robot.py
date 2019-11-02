@@ -53,8 +53,7 @@ class BBCON:
         motor_recs, halt_request = self.arbitrator.choose_action()
         if halt_request:
             sys.exit()
-        for i, rec in enumerate(motor_recs):
-            self.motobs[i].update(rec)
+        self.motobs[0].update(motor_recs)
 
         # self.motobs.update(motor_recs)  # update motobs which then updates all motors
         for sensob in self.sensobs:
