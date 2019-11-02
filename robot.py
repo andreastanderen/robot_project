@@ -241,7 +241,7 @@ class Arbitrator:
 
     def choose_action(self):
         action = max(self.controller.active_behaviors, key=lambda b: b.weight)
-        print("\n", type(action), "was chosen", "\n")
+        print("\n", action, "was chosen", "\n")
         return action.motor_recommendations, action.halt_request
 
 
