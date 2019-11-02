@@ -72,7 +72,7 @@ class Sensob:
 
     def update(self):
         for i, sensor in enumerate(self.sensors):
-            self.values[i] = sensor.get.value()
+            self.values[i] = sensor.get_value()
 
 
 class Motob:
@@ -182,6 +182,19 @@ class SearchBehavior(Behavior):
             self.motor_recommendations = [left_motor, right_motor]
             self.match_degree = 1 - ir_match * ultra_match
 
+class TakePictureBehavior(Behavior):
+    def __init__(self, controller: BBCON, priority, camera, ultrasonic):
+        super().__init__(controller, priority)
+        self.sensobs = [camera, ultrasonic]
+        self.activate_value = 15
+
+    def consider_activation(self):
+        value = self.sensobs[1].get_value()
+        if value <= 15:
+            self.controller.activate_behavior(self)
+
+    def consider_deactivation(self):
+        value = self.sensobs[1].get_value()
 
 
 class Arbitrator:
