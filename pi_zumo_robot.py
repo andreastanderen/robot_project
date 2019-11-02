@@ -9,7 +9,7 @@ class PiZumoRobot:
 
     def __init__(self):
         self.controller = robot.BBCON()
-        self.controller.arbitrator = robot.arbitrator(self)
+        self.controller.arbitrator = robot.Arbitrator(self)
 
         self.controller.motobs = [robot.Motob()]
 
