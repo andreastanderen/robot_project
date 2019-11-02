@@ -133,16 +133,16 @@ class FollowLineBehavior(Behavior):
 
     def __init__(self, controller: BBCON, priority, ir_sensor):
         super().__init__(controller, priority)
-        self.activate_value = 0.5
+        self.activate_value = 0.3
         self.sensobs = [ir_sensor]
 
     def consider_activation(self):
         print("consider values", self.sensobs[0].values)
-        if any(value > self.activate_value for value in self.sensobs[0].values[0]):
+        if any(value <= self.activate_value for value in self.sensobs[0].values[0]):
             self.controller.activate_behavior(self)
 
     def consider_deactivation(self):
-        if all(value > 1 - self.activate_value for value in self.sensobs[0].values[0]):
+        if all(value > self.activate_value for value in self.sensobs[0].values[0]):
             self.controller.deactivate_behavior(self)
 
     def sense_and_act(self):
