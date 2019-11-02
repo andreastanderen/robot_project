@@ -1,3 +1,5 @@
+import time
+
 __author__ = 'keithd'
 
 from time import sleep
@@ -16,7 +18,9 @@ from zumo_button import ZumoButton
 # This just moves the robot around in a fixed dance pattern.  It uses no sensors.
 
 def dancer():
-    ZumoButton().wait_for_press()
+    # ZumoButton().wait_for_press()
+    print("Started, waiting for 3 sec")
+    time.sleep(3)
     m = Motors()
     m.forward(.2,3)
     m.backward(.2,3)
