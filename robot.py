@@ -28,7 +28,6 @@ class BBCON:
     def activate_behavior(self, behavior):
         """ if behavior is an existing behavior, add to
             active_behaviors """
-        print("activated", )
         if behavior not in self.behaviors:
             return
         self.active_behaviors.append(behavior)
@@ -47,20 +46,25 @@ class BBCON:
             update all sensobs and behaviors """
         # self.arbit..choose_act... chooses a winning behavior and returns
         # the winning behavors motor recommendations and halt_request
+        print("*" * 50)
+        print("Timestep", self.current_timestep)
+        print("Before updates:")
+        print("All behaviors:", self.behaviors)
+        print("Active behaviors:", self.active_behaviors)
         [sensob.update() for sensob in self.sensobs]
         [behavior.update() for behavior in self.behaviors]
-        print(self.behaviors)
+        print("\nAfter updates:", self.active_behaviors)
         motor_recs, halt_request = self.arbitrator.choose_action()
         if halt_request:
             sys.exit()
+
         self.motobs[0].update(motor_recs)
 
         # self.motobs.update(motor_recs)  # update motobs which then updates all motors
-        for sensob in self.sensobs:
-            sensob.reset()  # may need to reset associated sensors...
         time.sleep(0.5)
         [sensob.reset() for sensob in self.sensobs]
         self.current_timestep += 1
+        print("*" * 50, "\n\n")
 
 
 class Sensob:
@@ -116,11 +120,9 @@ class Behavior:
 
     def update(self):
         [sensob.update() for sensob in self.sensobs]
-        print("active flag", self.active_flag)
         if self.active_flag:
             self.consider_deactivation()
         else:
-            print("consider activation for", self)
             self.consider_activation()
         self.sense_and_act()
         self.weight = self.match_degree * self.priority
@@ -129,7 +131,7 @@ class Behavior:
         raise NotImplementedError
 
     def __str__(self):
-        return str(type(self))
+        return str(type(self))[8:-2]
 
 
 class FollowLineBehavior(Behavior):
@@ -140,7 +142,6 @@ class FollowLineBehavior(Behavior):
         self.sensobs = [ir_sensor]
 
     def consider_activation(self):
-        print("consider values", self.sensobs[0].values)
         if any(value <= self.activate_value for value in self.sensobs[0].values[0]):
             self.controller.activate_behavior(self)
 
@@ -228,7 +229,7 @@ class TakePictureBehavior(Behavior):
             print("Take picture")
             self.motor_recommendations = [0, 0]
             self.match_degree = 1
-            img = IMR.Imager(image=self.sensobs[0].values[0]).scale(1,1)
+            img = IMR.Imager(image=self.sensobs[0].values[0]).scale(1, 1)
             img.dump_image("images/" + str(time.asctime()) + '.jpeg')
             self.halt_request = True
 
@@ -240,7 +241,7 @@ class Arbitrator:
 
     def choose_action(self):
         action = max(self.controller.active_behaviors, key=lambda b: b.weight)
-        print("Chose", type(action))
+        print("\n", type(action), "was chosen", "\n")
         return action.motor_recommendations, action.halt_request
 
 
