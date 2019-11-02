@@ -40,6 +40,7 @@ class Motors():
 
     def backward(self, speed=0.25, dur=None):
         self.dc = int(self.max * speed)
+        print("dc", self.dc)
         self.set_left_dir(1)
         self.set_right_dir(1)
         self.set_left_speed(self.dc)
