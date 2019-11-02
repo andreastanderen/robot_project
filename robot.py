@@ -126,7 +126,7 @@ class Behavior:
         raise NotImplementedError
 
     def __str__(self):
-        return type(self)
+        return str(type(self))
 
 
 class FollowLineBehavior(Behavior):
