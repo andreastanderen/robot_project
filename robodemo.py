@@ -82,3 +82,4 @@ def shoot_panorama(camera,motors,shots=5):
 if __name__ == '__main__':
     m = Motors()
     m.set_value([1, 1], 3)
+    explorer()
