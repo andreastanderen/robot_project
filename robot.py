@@ -68,7 +68,7 @@ class Sensob:
         if sensors is None:
             sensors = []
         self.sensors = sensors
-        self.values = []
+        self.values = [None] * len(sensors)
 
     def update(self):
         for i, sensor in enumerate(self.sensors):
