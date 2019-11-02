@@ -174,14 +174,14 @@ class SearchBehavior(Behavior):
 
     def consider_activation(self):
         ir_deactivated = all(value > self.deactivate_ir_value for value in self.sensobs[0].values[0])
-        ultra_deactivated = self.sensobs[1].values[0] > self.deactivate_ultra
-        if ir_deactivated and ultra_deactivated:
+        # ultra_deactivated = self.sensobs[1].values[0] > self.deactivate_ultra
+        if ir_deactivated:
             self.controller.activate_behavior(self)
 
     def consider_deactivation(self):
         ir_deactivated = any(value < self.deactivate_ir_value for value in self.sensobs[0].values[0])
         ultra_deactivated = self.sensobs[1].values[0] > self.deactivate_ultra
-        if not (ir_deactivated and ultra_deactivated):
+        if ir_deactivated :
             self.controller.deactivate_behavior(self)
 
     def sense_and_act(self):
