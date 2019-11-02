@@ -229,6 +229,7 @@ class TakePictureBehavior(Behavior):
             self.match_degree = 1
             img = IMR.Imager(image=self.sensobs[0].values)
             img.dump_image(str(time.asctime()) + '.jpeg')
+            self.halt_request = True
 
 
 class Arbitrator:
