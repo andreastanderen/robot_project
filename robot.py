@@ -79,6 +79,10 @@ class Sensob:
             self.values[i] = sensor.get_value()
             print(type(sensor), self.values[i])
 
+    def reset(self):
+        for sensor in self.sensors:
+            sensor.reset()
+
 
 class Motob:
 
