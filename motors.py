@@ -14,7 +14,7 @@ class Motors():
         self.normal = 300
         self.low = 100
 
-        wp.pinMode(18, 2)
+        print(wp.pinMode(18, 2))
         wp.pinMode(19, 2)
         wp.pinMode(23, 1)
         wp.pinMode(24, 1)
