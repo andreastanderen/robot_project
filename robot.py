@@ -112,6 +112,7 @@ class Behavior:
 
     def update(self):
         [sensob.update() for sensob in self.sensobs]
+        print("active flag", self.active_flag)
         if self.active_flag:
             self.consider_deactivation()
         else:
