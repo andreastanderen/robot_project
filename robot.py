@@ -56,6 +56,8 @@ class BBCON:
         print("\nAfter updates:", self.active_behaviors)
         motor_recs, halt_request = self.arbitrator.choose_action()
         if halt_request:
+            self.motobs[0].update([0,0])
+            self.motobs[0].operationalize()
             sys.exit()
 
         self.motobs[0].update(motor_recs)
