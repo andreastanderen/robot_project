@@ -159,14 +159,14 @@ class FollowLineBehavior(Behavior):
 
     def sense_and_act(self):
         values = self.sensobs[0].values[0]
-        min_left_value = min(values[0:2])
-        min_right_value = min(values[4:])
+        min_left_value = values[0]
+        min_right_value = values[5]
         left_motor_action = min_left_value
         right_motor_action = min_right_value
         if left_motor_action > right_motor_action:
-            self.motor_recommendations = [0.4, 0]
+            self.motor_recommendations = [0.3, -0.1]
         elif left_motor_action < right_motor_action:
-            self.motor_recommendations = [0, 0.4]
+            self.motor_recommendations = [-0.1, 0.3]
         else:
             self.motor_recommendations = [0.3, 0.3]
         print(values)
@@ -237,7 +237,7 @@ class TakePictureBehavior(Behavior):
             self.motor_recommendations = [0.3, 0.3]
             self.match_degree = 1
         elif value <= 10:
-            print("Take picture")
+            # print("Take picture")
             img = IMR.Imager(image=self.sensobs[0].values[0]).scale(1, 1)
             filename = "images/" + str(time.asctime()) + '.jpeg'
             pixel = img.get_pixel(img.image.size[0] // 2, img.image.size[1] // 2)
