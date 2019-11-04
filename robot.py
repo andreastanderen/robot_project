@@ -146,7 +146,7 @@ class FollowLineBehavior(Behavior):
 
     def __init__(self, controller: BBCON, priority, ir_sensor):
         super().__init__(controller, priority)
-        self.activate_value = 0.1
+        self.activate_value = 0.2
         self.sensobs = [ir_sensor]
 
     def consider_activation(self):
@@ -164,9 +164,9 @@ class FollowLineBehavior(Behavior):
         left_motor_action = min_left_value
         right_motor_action = min_right_value
         if left_motor_action > right_motor_action:
-            self.motor_recommendations = [0.3, 0]
+            self.motor_recommendations = [0.4, 0]
         elif left_motor_action < right_motor_action:
-            self.motor_recommendations = [0, 0.3]
+            self.motor_recommendations = [0, 0.4]
         else:
             self.motor_recommendations = [0.3, 0.3]
         print(values)
