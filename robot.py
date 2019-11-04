@@ -158,8 +158,8 @@ class FollowLineBehavior(Behavior):
         values = self.sensobs[0].values[0]
         min_left_value = min(values[0:3])
         min_right_value = min(values[3:])
-        left_motor_action = min_left_value
-        right_motor_action = min_right_value
+        left_motor_action = min_left_value * 20
+        right_motor_action = min_right_value * 20
         if left_motor_action != right_motor_action:
             self.motor_recommendations = [left_motor_action, right_motor_action]
         else:
@@ -237,7 +237,8 @@ class TakePictureBehavior(Behavior):
             self.match_degree = 1
             img = IMR.Imager(image=self.sensobs[0].values[0]).scale(1, 1)
             print(self.sensobs[0].values[0][:10])
-            img.dump_image("images/" + str(time.asctime()) + '.jpeg')
+            filename = "images/" + str(time.asctime()) + '.jpeg'
+            img.dump_image(filename)
             self.halt_request = True
 
 
