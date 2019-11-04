@@ -161,8 +161,8 @@ class FollowLineBehavior(Behavior):
         values = self.sensobs[0].values[0]
         min_left_value = values[0]
         min_right_value = values[5]
-        left_motor_action = 0
-        right_motor_action = 0
+        left_motor_action = 1
+        right_motor_action = 1
         if min_left_value <= 0.1:
             left_motor_action = min_left_value
         if min_right_value <= 0.1:
@@ -182,7 +182,7 @@ class SearchBehavior(Behavior):
         super().__init__(controller, priority)
         self.sensobs = [ir_sensob, ultrasonic]
         self.deactivate_ir_value = 0.1
-        self.deactivate_ultra = 20
+        self.deactivate_ultra = 30
 
     def consider_activation(self):
         ir_deactivated = all(value > self.deactivate_ir_value for value in self.sensobs[0].values[0])
@@ -224,7 +224,7 @@ class TakePictureBehavior(Behavior):
     def __init__(self, controller: BBCON, priority, camera, ultrasonic):
         super().__init__(controller, priority)
         self.sensobs = [camera, ultrasonic]
-        self.activate_value = 20
+        self.activate_value = 30
 
     def consider_activation(self):
         value = self.sensobs[1].values[0]
