@@ -161,8 +161,7 @@ class FollowLineBehavior(Behavior):
         if left_motor_action != right_motor_action:
             self.motor_recommendations = [left_motor_action, right_motor_action]
         else:
-            max_action = max(left_motor_action, right_motor_action)
-            self.motor_recommendations = [max_action, max_action]
+            self.motor_recommendations = [0.5, 0.5]
         print(right_motor_action, left_motor_action)
         print(values)
         self.match_degree = max(1 - left_motor_action, 1 - right_motor_action)
