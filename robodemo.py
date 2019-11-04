@@ -9,6 +9,7 @@ from reflectance_sensors import ReflectanceSensors
 from camera import Camera
 from motors import Motors
 from ultrasonic import Ultrasonic
+import wiringpi as wp
 from zumo_button import ZumoButton
 
 
@@ -20,7 +21,8 @@ from zumo_button import ZumoButton
 def dancer():
     # ZumoButton().wait_for_press()
     # print("Started, waiting for 3 sec")
-    # time.sleep(3)
+    # time.sleep(39
+    wp.wiringPiSetupGpio()
     m = Motors()
     print("forward")
     m.forward(.2,3)
