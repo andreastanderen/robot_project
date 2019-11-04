@@ -59,6 +59,7 @@ class BBCON:
             sys.exit()
 
         self.motobs[0].update(motor_recs)
+        print("motor recs", motor_recs)
         self.motobs[0].operationalize()
         # self.motobs.update(motor_recs)  # update motobs which then updates all motors
         time.sleep(0.5)
