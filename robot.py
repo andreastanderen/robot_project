@@ -208,8 +208,10 @@ class SearchBehavior(Behavior):
             self.motor_recommendations = [forward_speed] * 2
             self.match_degree = ultra_match
         else:
-            left_motor = random.random() * 0.6 - 0.3
-            right_motor = random.random() * 0.6 - 0.3
+            left_motor_forward = random.randint(-1, 1)
+            right_motor_forward = random.randint(-1, 1)
+            left_motor = left_motor_forward * 0.4
+            right_motor = right_motor_forward * 0.4
             self.motor_recommendations = [left_motor, right_motor]
             self.match_degree = 1 - ir_match * ultra_match
 
