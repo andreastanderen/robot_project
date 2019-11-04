@@ -257,7 +257,7 @@ class TakePictureBehavior(Behavior):
 
                 self.halt_request = True
             else:
-                self.motor_recommendations = [-0.3, 0.3]
+                self.motor_recommendations = [0.7, -0.7]
 
 
 class Arbitrator:
