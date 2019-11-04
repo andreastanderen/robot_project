@@ -235,16 +235,19 @@ class TakePictureBehavior(Behavior):
             self.match_degree = 1
         elif value <= 5:
             print("Take picture")
-            self.motor_recommendations = [0, 0]
-            self.match_degree = 1
             img = IMR.Imager(image=self.sensobs[0].values[0]).scale(1, 1)
-            resized = img.resize(1, 1)
-            # print(self.sensobs[0].values[0][:10])
             filename = "images/" + str(time.asctime()) + '.jpeg'
             pixel = img.get_pixel(img.image.size[0] // 2, img.image.size[1] // 2)
             print(pixel)
-            img.dump_image(filename)
-            self.halt_request = True
+            self.match_degree = 1
+            if sum(pixel) > 600:
+                self.motor_recommendations = [0, 0]
+
+                img.dump_image(filename)
+
+                self.halt_request = True
+            else:
+                self.motor_recommendations = [-0.5, -0.5]
 
 
 class Arbitrator:
