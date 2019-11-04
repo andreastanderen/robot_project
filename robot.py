@@ -146,7 +146,7 @@ class FollowLineBehavior(Behavior):
 
     def __init__(self, controller: BBCON, priority, ir_sensor):
         super().__init__(controller, priority)
-        self.activate_value = 0.2
+        self.activate_value = 0.1
         self.sensobs = [ir_sensor]
 
     def consider_activation(self):
@@ -244,7 +244,7 @@ class TakePictureBehavior(Behavior):
             self.match_degree = 1
             print("Pixel")
             print(sum(pixel))
-            if sum(pixel) > 600:
+            if sum(pixel) > 400:
                 self.motor_recommendations = [0, 0]
 
                 img.dump_image(filename)
