@@ -53,8 +53,11 @@ class BBCON:
         print("Active behaviors:", self.active_behaviors)
         [sensob.update() for sensob in self.sensobs]
         [behavior.update() for behavior in self.behaviors]
-        print("\nAfter updates:", self.active_behaviors)
+        print("\nAfter updates:")
+        print("active after updates:", self.active_behaviors)
         motor_recs, halt_request = self.arbitrator.choose_action()
+        if motor_recs is None:
+            return
         if halt_request:
             self.motobs[0].update([0, 0])
             self.motobs[0].operationalize()
@@ -65,7 +68,7 @@ class BBCON:
         self.motobs[0].operationalize()
         # self.motobs.update(motor_recs)  # update motobs which then updates all motors
         time.sleep(0.5)
-        # [sensob.reset() for sensob in self.sensobs]
+        [sensob.reset() for sensob in self.sensobs]
         self.current_timestep += 1
         print("*" * 50, "\n\n")
 
@@ -166,7 +169,6 @@ class FollowLineBehavior(Behavior):
             self.motor_recommendations = [0, 0.3]
         else:
             self.motor_recommendations = [0.3, 0.3]
-        print(right_motor_action, left_motor_action)
         print(values)
         self.match_degree = max(1 - left_motor_action, 1 - right_motor_action)
 
@@ -186,8 +188,8 @@ class SearchBehavior(Behavior):
 
     def consider_deactivation(self):
         ir_deactivated = any(value < self.deactivate_ir_value for value in self.sensobs[0].values[0])
-        ultra_deactivated = self.sensobs[1].values[0] > self.deactivate_ultra
-        if ir_deactivated:
+        ultra_deactivated = self.sensobs[1].values[0] < self.deactivate_ultra
+        if ir_deactivated or ultra_deactivated:
             self.controller.deactivate_behavior(self)
 
     def sense_and_act(self):
@@ -206,8 +208,8 @@ class SearchBehavior(Behavior):
             self.motor_recommendations = [forward_speed] * 2
             self.match_degree = ultra_match
         else:
-            left_motor = random.random() * 2 - 1
-            right_motor = random.random() * 2 - 1
+            left_motor = random.random() * 0.6 - 0.3
+            right_motor = random.random() * 0.6 - 0.3
             self.motor_recommendations = [left_motor, right_motor]
             self.match_degree = 1 - ir_match * ultra_match
 
@@ -247,7 +249,7 @@ class TakePictureBehavior(Behavior):
 
                 self.halt_request = True
             else:
-                self.motor_recommendations = [-0.5, -0.5]
+                self.motor_recommendations = [-0.3, 0.3]
 
 
 class Arbitrator:
@@ -256,6 +258,8 @@ class Arbitrator:
         self.controller = controller
 
     def choose_action(self):
+        if len(self.controller.active_behaviors) == 0:
+            return None, None
         action = max(self.controller.active_behaviors, key=lambda b: b.weight)
         print("\n", action, "was chosen", "\n")
         return action.motor_recommendations, action.halt_request
