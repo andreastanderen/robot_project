@@ -161,14 +161,18 @@ class FollowLineBehavior(Behavior):
         values = self.sensobs[0].values[0]
         min_left_value = values[0]
         min_right_value = values[5]
-        left_motor_action = min_left_value
-        right_motor_action = min_right_value
+        left_motor_action = 0
+        right_motor_action = 0
+        if min_left_value <= 0.1:
+            left_motor_action = min_left_value
+        if min_right_value <= 0.1:
+            right_motor_action = min_right_value
         if left_motor_action > right_motor_action:
-            self.motor_recommendations = [0.4, -0.1]
+            self.motor_recommendations = [0.3, -0.1]
         elif left_motor_action < right_motor_action:
-            self.motor_recommendations = [-0.1, 0.4]
+            self.motor_recommendations = [-0.1, 0.3]
         else:
-            self.motor_recommendations = [0.4, 0.4]
+            self.motor_recommendations = [0.3, 0.3]
         print(values)
         self.match_degree = max(1 - left_motor_action, 1 - right_motor_action)
 
