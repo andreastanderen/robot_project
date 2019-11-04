@@ -56,7 +56,7 @@ class BBCON:
         print("\nAfter updates:", self.active_behaviors)
         motor_recs, halt_request = self.arbitrator.choose_action()
         if halt_request:
-            self.motobs[0].update([0,0])
+            self.motobs[0].update([0, 0])
             self.motobs[0].operationalize()
             sys.exit()
 
@@ -187,7 +187,7 @@ class SearchBehavior(Behavior):
     def consider_deactivation(self):
         ir_deactivated = any(value < self.deactivate_ir_value for value in self.sensobs[0].values[0])
         ultra_deactivated = self.sensobs[1].values[0] > self.deactivate_ultra
-        if ir_deactivated :
+        if ir_deactivated:
             self.controller.deactivate_behavior(self)
 
     def sense_and_act(self):
@@ -238,8 +238,11 @@ class TakePictureBehavior(Behavior):
             self.motor_recommendations = [0, 0]
             self.match_degree = 1
             img = IMR.Imager(image=self.sensobs[0].values[0]).scale(1, 1)
-            print(self.sensobs[0].values[0][:10])
+            resized = img.resize(1, 1)
+            # print(self.sensobs[0].values[0][:10])
             filename = "images/" + str(time.asctime()) + '.jpeg'
+            pixel = img.get_pixel(img.image.size[0] // 2, img.image.size[1] // 2)
+            print(pixel)
             img.dump_image(filename)
             self.halt_request = True
 
