@@ -242,6 +242,8 @@ class TakePictureBehavior(Behavior):
             pixel = img.get_pixel(img.image.size[0] // 2, img.image.size[1] // 2)
             print(pixel)
             self.match_degree = 1
+            print("Pixel")
+            print(sum(pixel))
             if sum(pixel) > 600:
                 self.motor_recommendations = [0, 0]
 
