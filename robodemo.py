@@ -12,6 +12,7 @@ from ultrasonic import Ultrasonic
 import wiringpi as wp
 from zumo_button import ZumoButton
 
+wp.wiringPiSetupGpio()
 
 ## BE SURE TO RUN THESE DEMOS ON THE FLOOR or to have plenty of people guarding
 ## #  the edges of a table if it is run there.
@@ -22,7 +23,7 @@ def dancer():
     # ZumoButton().wait_for_press()
     # print("Started, waiting for 3 sec")
     # time.sleep(39
-    wp.wiringPiSetupGpio()
+
     m = Motors()
     print("forward")
     m.forward(.2,3)
@@ -82,4 +83,5 @@ def shoot_panorama(camera,motors,shots=5):
 
 
 if __name__ == '__main__':
+    # wp.wiringPiSetupGpio()
     dancer()
