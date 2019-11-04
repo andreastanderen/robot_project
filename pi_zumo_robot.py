@@ -6,10 +6,11 @@ from zumo_button import ZumoButton
 import wiringpi as wp
 
 
+wp.wiringPiSetupGpio()
+
 class PiZumoRobot:
 
     def __init__(self):
-        wp.wiringPiSetupGpio()
         self.controller = robot.BBCON()
         self.controller.arbitrator = robot.Arbitrator(self.controller)
 
