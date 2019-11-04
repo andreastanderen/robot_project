@@ -197,7 +197,7 @@ class SearchBehavior(Behavior):
         ir_deactivated = min(ir_values) > self.deactivate_ir_value
         ultra_deactivated = ultra_value > self.deactivate_ultra
         ir_match = 1 - min(ir_values)
-        ultra_match = 1 - min(ultra_value, self.deactivate_ultra) / (self.deactivate_ultra + 1)
+        ultra_match = 1
         if not ir_deactivated:
             self.motor_recommendations = [0, 0]
             self.match_degree = ir_match
@@ -231,7 +231,7 @@ class TakePictureBehavior(Behavior):
     def sense_and_act(self):
         value = self.sensobs[1].values[0]
         if value > 5:
-            self.motor_recommendations = [0.5, 0.5]
+            self.motor_recommendations = [0.3, 0.3]
             self.match_degree = 1
         elif value <= 5:
             print("Take picture")
