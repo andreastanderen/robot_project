@@ -19,8 +19,8 @@ from zumo_button import ZumoButton
 
 def dancer():
     # ZumoButton().wait_for_press()
-    print("Started, waiting for 3 sec")
-    time.sleep(3)
+    # print("Started, waiting for 3 sec")
+    # time.sleep(3)
     m = Motors()
     print("forward")
     m.forward(.2,3)
@@ -37,7 +37,7 @@ def dancer():
 # then does a little dancing before backing up to approximately 50 cm from the nearest obstacle.
 
 def explorer(dist=10):
-    ZumoButton().wait_for_press()
+    # ZumoButton().wait_for_press()
     m = Motors(); u = Ultrasonic()
     while u.update() > dist:
         m.forward(.2,0.2)
@@ -80,6 +80,4 @@ def shoot_panorama(camera,motors,shots=5):
 
 
 if __name__ == '__main__':
-    m = Motors()
-    m.set_value([1, 1], 3)
-    explorer()
+    dancer()
