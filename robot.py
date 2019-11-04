@@ -106,7 +106,7 @@ class Motob:
     def operationalize(self):
         if self.value is None:
             return
-        self.motors[0].set_value(self.value, 0.3)
+        self.motors[0].set_value(self.value, 0.5)
 
 
 class Behavior:
