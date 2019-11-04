@@ -65,7 +65,7 @@ class BBCON:
         self.motobs[0].operationalize()
         # self.motobs.update(motor_recs)  # update motobs which then updates all motors
         time.sleep(0.5)
-        [sensob.reset() for sensob in self.sensobs]
+        # [sensob.reset() for sensob in self.sensobs]
         self.current_timestep += 1
         print("*" * 50, "\n\n")
 
