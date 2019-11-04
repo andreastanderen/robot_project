@@ -159,8 +159,8 @@ class FollowLineBehavior(Behavior):
 
     def sense_and_act(self):
         values = self.sensobs[0].values[0]
-        min_left_value = min(values[0:3])
-        min_right_value = min(values[3:])
+        min_left_value = min(values[0:2])
+        min_right_value = min(values[4:])
         left_motor_action = min_left_value
         right_motor_action = min_right_value
         if left_motor_action > right_motor_action:
@@ -178,7 +178,7 @@ class SearchBehavior(Behavior):
         super().__init__(controller, priority)
         self.sensobs = [ir_sensob, ultrasonic]
         self.deactivate_ir_value = 0.1
-        self.deactivate_ultra = 15
+        self.deactivate_ultra = 20
 
     def consider_activation(self):
         ir_deactivated = all(value > self.deactivate_ir_value for value in self.sensobs[0].values[0])
@@ -218,7 +218,7 @@ class TakePictureBehavior(Behavior):
     def __init__(self, controller: BBCON, priority, camera, ultrasonic):
         super().__init__(controller, priority)
         self.sensobs = [camera, ultrasonic]
-        self.activate_value = 15
+        self.activate_value = 20
 
     def consider_activation(self):
         value = self.sensobs[1].values[0]
@@ -233,10 +233,10 @@ class TakePictureBehavior(Behavior):
     def sense_and_act(self):
         value = self.sensobs[1].values[0]
         print(value)
-        if value > 5:
+        if value > 10:
             self.motor_recommendations = [0.3, 0.3]
             self.match_degree = 1
-        elif value <= 5:
+        elif value <= 10:
             print("Take picture")
             img = IMR.Imager(image=self.sensobs[0].values[0]).scale(1, 1)
             filename = "images/" + str(time.asctime()) + '.jpeg'
