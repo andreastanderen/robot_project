@@ -3,11 +3,13 @@ from camera import Camera
 from ultrasonic import Ultrasonic
 from reflectance_sensors import ReflectanceSensors
 from zumo_button import ZumoButton
+import wiringpi as wp
 
 
 class PiZumoRobot:
 
     def __init__(self):
+        wp.wiringPiSetupGpio()
         self.controller = robot.BBCON()
         self.controller.arbitrator = robot.Arbitrator(self.controller)
 
