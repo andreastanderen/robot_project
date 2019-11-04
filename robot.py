@@ -164,11 +164,11 @@ class FollowLineBehavior(Behavior):
         left_motor_action = min_left_value
         right_motor_action = min_right_value
         if left_motor_action > right_motor_action:
-            self.motor_recommendations = [0.3, -0.1]
+            self.motor_recommendations = [0.4, -0.1]
         elif left_motor_action < right_motor_action:
-            self.motor_recommendations = [-0.1, 0.3]
+            self.motor_recommendations = [-0.1, 0.4]
         else:
-            self.motor_recommendations = [0.3, 0.3]
+            self.motor_recommendations = [0.4, 0.4]
         print(values)
         self.match_degree = max(1 - left_motor_action, 1 - right_motor_action)
 
