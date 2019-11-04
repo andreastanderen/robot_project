@@ -232,6 +232,7 @@ class TakePictureBehavior(Behavior):
 
     def sense_and_act(self):
         value = self.sensobs[1].values[0]
+        print(value)
         if value > 5:
             self.motor_recommendations = [0.3, 0.3]
             self.match_degree = 1
@@ -240,10 +241,9 @@ class TakePictureBehavior(Behavior):
             img = IMR.Imager(image=self.sensobs[0].values[0]).scale(1, 1)
             filename = "images/" + str(time.asctime()) + '.jpeg'
             pixel = img.get_pixel(img.image.size[0] // 2, img.image.size[1] // 2)
-            print(pixel)
+
             self.match_degree = 1
-            print("Pixel")
-            print(sum(pixel))
+
             if sum(pixel) > 400:
                 self.motor_recommendations = [0, 0]
 
