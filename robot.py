@@ -236,6 +236,7 @@ class TakePictureBehavior(Behavior):
             self.motor_recommendations = [0, 0]
             self.match_degree = 1
             img = IMR.Imager(image=self.sensobs[0].values[0]).scale(1, 1)
+            print(self.sensobs[0].values[0][:10])
             img.dump_image("images/" + str(time.asctime()) + '.jpeg')
             self.halt_request = True
 
